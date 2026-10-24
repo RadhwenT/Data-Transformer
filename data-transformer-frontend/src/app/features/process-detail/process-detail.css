@@ -1,0 +1,186 @@
+.back {
+  display: inline-block;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.back:hover { color: var(--text); }
+
+.panel {
+  margin-bottom: 24px;
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.header-actions { display: flex; align-items: center; gap: 10px; }
+
+h1 { margin: 0; font-size: 22px; font-weight: 500; }
+h2 { margin: 0 0 16px; font-size: 16px; font-weight: 500; }
+
+.row { display: flex; gap: 18px; }
+.field { flex: 1; margin-bottom: 18px; }
+
+label {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 7px;
+}
+
+.optional { color: var(--muted); font-weight: 400; }
+
+input, select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 14px;
+  background: var(--field);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 15px;
+}
+
+input:focus, select:focus { outline: none; border-color: var(--accent); }
+input:disabled, select:disabled { opacity: 0.5; }
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* --- selecteur visuel du type de regle --- */
+
+.rule-type-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.rule-type-card {
+  text-align: left;
+  padding: 14px 16px;
+  background: var(--field);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: inherit;
+  cursor: pointer;
+  min-width: 0;
+}
+
+.rule-type-card.selected {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+}
+
+.rule-type-name { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
+.rule-type-desc { font-size: 12px; color: var(--text-dim); line-height: 1.4; }
+.rule-type-card.selected .rule-type-name { color: var(--accent); }
+
+/* --- pipeline --- */
+
+.rule-list { display: flex; flex-direction: column; gap: 2px; }
+
+.rule-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 4px;
+  border-bottom: 1px solid var(--surface-alt);
+}
+
+.rule-row:last-child { border-bottom: none; }
+
+.rule-order { font-size: 14px; font-weight: 500; color: var(--accent); width: 20px; flex-shrink: 0; }
+
+.rule-info { flex: 1; min-width: 0; }
+.rule-type { font-size: 14px; color: var(--text); }
+.rule-fields { font-size: 13px; color: var(--text-dim); margin-top: 3px; }
+
+.rule-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+button.icon {
+  padding: 6px 10px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+
+.bottom-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 8px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+th {
+  text-align: left;
+  padding: 14px 18px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+
+td {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--surface-alt);
+  font-size: 15px;
+}
+
+tbody tr:last-child td { border-bottom: none; }
+
+.mono { color: var(--text-dim); font-size: 14px; }
+
+.run-status {
+  padding: 3px 10px;
+  border-radius: 3px;
+  font-size: 12px;
+  background: var(--surface-alt);
+  color: var(--text-dim);
+}
+
+.run-status.success { background: var(--accent-bg); color: var(--accent); }
+.run-status.failed { background: var(--danger-bg); color: var(--danger); }
+.run-status.pending,
+.run-status.running { background: var(--surface-alt); color: var(--text-dim); }
+.actions { text-align: right; display: flex; gap: 8px; justify-content: flex-end; }
+
+button {
+  padding: 8px 18px;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+button.primary { background: var(--accent); border: none; color: var(--on-accent); }
+button.secondary { background: var(--surface-alt); border: none; color: var(--text); }
+button.ghost { background: transparent; border: 1px solid var(--border); color: var(--text-dim); }
+button.ghost.danger { border-color: var(--danger-bg); color: var(--danger); }
+button:hover:not(:disabled) { opacity: 0.85; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.muted { color: var(--muted); font-size: 14px; }
+.error { color: var(--danger); font-size: 14px; margin-bottom: 16px; }
+.hint { color: var(--muted); font-size: 14px; }

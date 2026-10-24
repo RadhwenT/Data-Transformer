@@ -1,0 +1,18 @@
+
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: datatransformer-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: data_transformer
+      POSTGRES_USER: datatransformer_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-datatransformer_pass}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

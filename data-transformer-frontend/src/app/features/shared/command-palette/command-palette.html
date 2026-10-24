@@ -1,0 +1,25 @@
+@if (open) {
+  <div class="overlay" (click)="onOverlayClick()">
+    <div class="box" (click)="stopProp($event)">
+      <input
+        class="palette-input"
+        placeholder="tapez une commande ou une recherche…"
+        [ngModel]="query"
+        (ngModelChange)="onQueryChange($event)"
+        name="paletteQuery"
+        autofocus />
+      <div class="list">
+        @if (filteredCommands().length === 0) {
+          <p class="empty">aucun résultat</p>
+        } @else {
+          @for (cmd of filteredCommands(); track cmd.label) {
+            <div class="item" (click)="onSelect(cmd)">
+              <span class="label">{{ cmd.label }}</span>
+              <span class="hint">{{ cmd.hint }}</span>
+            </div>
+          }
+        }
+      </div>
+    </div>
+  </div>
+}

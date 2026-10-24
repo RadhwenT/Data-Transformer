@@ -1,0 +1,207 @@
+<app-shell [navItems]="navItems" active="processes" title="processes / detail">
+    <a class="back" routerLink="/processes">← processes</a>
+
+    @if (loading()) {
+      <p class="muted">chargement...</p>
+    } @else {
+      @if (errorMessage()) {
+        <p class="error">✗ {{ errorMessage() }}</p>
+      }
+
+      @if (isNew()) {
+        <div class="panel">
+          <div class="header">
+            <h1>new process</h1>
+          </div>
+
+          <form (ngSubmit)="saveProcess()">
+            <div class="row">
+              <div class="field">
+                <label for="name">name</label>
+                <input id="name" name="name" [(ngModel)]="name" [disabled]="saving()" required />
+              </div>
+              <div class="field">
+                <label for="description">description <span class="optional">optional</span></label>
+                <input id="description" name="description" [(ngModel)]="description" [disabled]="saving()" />
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="field">
+                <label for="inputFormat">input format</label>
+                <select id="inputFormat" name="inputFormat" [(ngModel)]="inputFormat" [disabled]="saving()">
+                  <option value="JSON">JSON</option>
+                  <option value="XML">XML</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="outputFormat">output format</label>
+                <select id="outputFormat" name="outputFormat" [(ngModel)]="outputFormat" [disabled]="saving()">
+                  <option value="JSON">JSON</option>
+                  <option value="XML">XML</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="primary" [disabled]="saving()">
+                {{ saving() ? 'saving...' : 'create process' }}
+              </button>
+            </div>
+          </form>
+        </div>
+        <p class="hint">save the process first to add rules.</p>
+      } @else {
+
+        <div class="panel">
+          <div class="header">
+            <h1>{{ name }}</h1>
+            <div class="header-actions">
+              <button type="button" class="ghost danger" (click)="deleteProcess()">delete process</button>
+              <button type="button" class="primary" (click)="goToRun()">use this process</button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="name">name</label>
+              <input id="name" name="name" [(ngModel)]="name" required />
+            </div>
+            <div class="field">
+              <label for="description">description <span class="optional">optional</span></label>
+              <input id="description" name="description" [(ngModel)]="description" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="inputFormat">input format</label>
+              <input id="inputFormat" name="inputFormat" [value]="inputFormat" disabled />
+            </div>
+            <div class="field">
+              <label for="outputFormat">output format</label>
+              <input id="outputFormat" name="outputFormat" [value]="outputFormat" disabled />
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>ajouter une règle</h2>
+
+          @if (ruleError()) {
+            <p class="error">✗ {{ ruleError() }}</p>
+          }
+
+          <div class="rule-type-grid">
+            @for (r of rulesCatalog(); track r.id) {
+              <button
+                type="button"
+                class="rule-type-card"
+                [class.selected]="selectedRuleTypeId === r.id"
+                (click)="selectRuleType(r.id)">
+                <div class="rule-type-name">{{ r.type }}</div>
+                <div class="rule-type-desc">{{ r.description }}</div>
+              </button>
+            }
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="ruleSourceField">champ source</label>
+              <input id="ruleSourceField" name="ruleSourceField" [(ngModel)]="ruleSourceField" />
+            </div>
+            <div class="field">
+              <label for="ruleSourceField2">deuxième champ source</label>
+              <input
+                id="ruleSourceField2"
+                name="ruleSourceField2"
+                [(ngModel)]="ruleSourceField2"
+                [disabled]="!needsSourceField2()" />
+            </div>
+            <div class="field">
+              <label for="ruleTargetField">champ cible</label>
+              <input
+                id="ruleTargetField"
+                name="ruleTargetField"
+                [(ngModel)]="ruleTargetField"
+                [disabled]="!needsTargetField()" />
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="primary" (click)="submitRuleForm()">
+              {{ editingLocalId() !== null ? 'modifier la règle' : '+ ajouter la règle' }}
+            </button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>pipeline ({{ draftRules().length }})</h2>
+
+          @if (draftRules().length === 0) {
+            <p class="muted">aucune règle pour l'instant</p>
+          } @else {
+            <div class="rule-list">
+              @for (d of draftRules(); track d.localId; let i = $index) {
+                <div class="rule-row">
+                  <div class="rule-order">{{ i + 1 }}</div>
+                  <div class="rule-info">
+                    <div class="rule-type">{{ d.ruleType }}</div>
+                    <div class="rule-fields">
+                      {{ d.sourceField }}{{ d.sourceField2 ? ' + ' + d.sourceField2 : '' }}{{ d.targetField ? ' → ' + d.targetField : '' }}
+                    </div>
+                  </div>
+                  <div class="rule-actions">
+                    <button type="button" class="icon" [disabled]="i === 0" (click)="moveRuleUp(i)">↑</button>
+                    <button type="button" class="icon" [disabled]="i === draftRules().length - 1" (click)="moveRuleDown(i)">↓</button>
+                    <button type="button" class="secondary" (click)="editDraftRule(d)">edit</button>
+                    <button type="button" class="ghost danger" (click)="removeDraftRule(d)">×</button>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="panel">
+          <h2>recent executions</h2>
+          @if (recentExecutions().length === 0) {
+            <p class="muted">no executions yet</p>
+          } @else {
+            <table>
+              <thead>
+                <tr>
+                  <th>id</th>
+                  <th>started</th>
+                  <th>status</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (execution of recentExecutions(); track execution.id) {
+                  <tr>
+                    <td class="mono">#{{ execution.id }}</td>
+                    <td class="mono">{{ formatDate(execution.startedAt) }}</td>
+                    <td>
+                      <span class="run-status" [class]="execution.status.toLowerCase()">{{ execution.status.toLowerCase() }}</span>
+                    </td>
+                    <td class="actions">
+                      <button class="ghost" (click)="goToExecution(execution)">view</button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          }
+        </div>
+
+        <div class="bottom-actions">
+          <button type="button" class="ghost" (click)="cancelAll()">annuler</button>
+          <button type="button" class="primary" [disabled]="savingAll()" (click)="saveAll()">
+            {{ savingAll() ? 'saving...' : 'save changes' }}
+          </button>
+        </div>
+
+      }
+    }
+</app-shell>

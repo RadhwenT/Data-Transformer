@@ -1,0 +1,153 @@
+<app-shell [navItems]="navItems" active="dashboard" title="dashboard">
+    <h1>dashboard admin</h1>
+
+    <div class="filter-row">
+      <span class="filter-label">filtrer par utilisateur</span>
+      <select [ngModel]="userFilter()" (ngModelChange)="onFilterChange($event)" name="userFilter">
+        <option value="all">tous les utilisateurs</option>
+        @for (u of users(); track u.id) {
+          <option [value]="u.id">{{ u.firstName }} {{ u.lastName }}</option>
+        }
+      </select>
+    </div>
+
+    @if (loading()) {
+      <p class="muted">chargement...</p>
+    } @else if (errorMessage()) {
+      <p class="error">✗ {{ errorMessage() }}</p>
+    } @else {
+
+      <div class="kpi-row">
+        <div class="kpi-card">
+          <div class="kpi-label">processes</div>
+          <div class="kpi-value">{{ kpiProcessCount() }}</div>
+          <div class="sparkline">
+            @for (h of sparklineProcesses; track $index) {
+              <div class="bar accent" [style.height.px]="h * 2"></div>
+            }
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">exécutions</div>
+          <div class="kpi-value">{{ kpiExecutionCount() }}</div>
+          <div class="sparkline">
+            @for (h of sparklineExecutions; track $index) {
+              <div class="bar accent" [style.height.px]="h * 2"></div>
+            }
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">taux de succès</div>
+          <div class="kpi-value">{{ kpiSuccessRate() }}</div>
+          <div class="sparkline">
+            @for (h of sparklineSuccess; track $index) {
+              <div class="bar accent" [style.height.px]="h * 2"></div>
+            }
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">utilisateurs actifs</div>
+          <div class="kpi-value">{{ kpiActiveUserCount() }}</div>
+          <div class="sparkline">
+            @for (h of sparklineUsers; track $index) {
+              <div class="bar dim" [style.height.px]="h * 2"></div>
+            }
+          </div>
+        </div>
+      </div>
+
+      @if (isAllUsers()) {
+        <div class="panel">
+          <h2>répartition par utilisateur</h2>
+          @if (usersWithStats().length === 0) {
+            <p class="muted">aucun utilisateur</p>
+          } @else {
+            <table>
+              <thead>
+                <tr>
+                  <th>name</th>
+                  <th>role</th>
+                  <th>processes</th>
+                  <th>exécutions</th>
+                  <th>succès</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of usersWithStats(); track row.user.id) {
+                  <tr>
+                    <td>{{ row.user.firstName }} {{ row.user.lastName }}</td>
+                    <td>{{ row.user.role }}</td>
+                    <td class="mono">{{ row.procCount }}</td>
+                    <td class="mono">{{ row.execCount }}</td>
+                    <td class="mono">{{ row.successRate }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          }
+        </div>
+      } @else {
+        <div class="dash-columns">
+          <div class="panel">
+            <h2>processes de l'utilisateur</h2>
+            @if (scopedProcesses().length === 0) {
+              <p class="muted">aucun traitement</p>
+            } @else {
+              <table>
+                <thead>
+                  <tr>
+                    <th>name</th>
+                    <th>format</th>
+                    <th>last run</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (p of scopedProcesses(); track p.id) {
+                    <tr>
+                      <td>{{ p.name }}</td>
+                      <td class="mono">{{ p.inputFormat }}→{{ p.outputFormat }}</td>
+                      <td>
+                        @if (p.lastRunStatus) {
+                          <span class="run-status" [class]="p.lastRunStatus.toLowerCase()">{{ p.lastRunStatus.toLowerCase() }}</span>
+                        } @else {
+                          <span class="muted">never</span>
+                        }
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            }
+          </div>
+          <div class="panel">
+            <h2>exécutions de l'utilisateur</h2>
+            @if (scopedExecutions().length === 0) {
+              <p class="muted">aucune exécution</p>
+            } @else {
+              <table>
+                <thead>
+                  <tr>
+                    <th>id</th>
+                    <th>started</th>
+                    <th>status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (e of scopedExecutions(); track e.id) {
+                    <tr>
+                      <td class="mono">#{{ e.id }}</td>
+                      <td class="mono">{{ formatDate(e.startedAt) }}</td>
+                      <td>
+                        <span class="run-status" [class]="e.status.toLowerCase()">{{ e.status.toLowerCase() }}</span>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            }
+          </div>
+        </div>
+      }
+
+    }
+</app-shell>

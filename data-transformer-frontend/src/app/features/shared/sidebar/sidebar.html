@@ -1,0 +1,18 @@
+<aside class="sidebar">
+  <nav class="nav-group">
+    @for (item of items; track item.key) {
+      <button class="nav-item" [class.active]="active === item.key" (click)="goTo(item.path)">{{ item.label }}</button>
+    }
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="theme-toggle-row" (click)="toggleTheme()">
+      <span>{{ themeLabel() }}</span>
+      <div class="theme-switch" [class.on]="theme() === 'light'"><div class="theme-switch-knob"></div></div>
+    </div>
+    <div class="footer-actions">
+      <button class="btn-ghost-full" [class.active]="active === 'settings'" (click)="goTo('/settings')">settings</button>
+      <button class="btn-ghost-full" (click)="logout()">logout</button>
+    </div>
+  </div>
+</aside>

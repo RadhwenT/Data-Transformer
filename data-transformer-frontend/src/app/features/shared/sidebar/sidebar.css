@@ -1,0 +1,109 @@
+/*
+ * :host (app-sidebar) est l'item flex direct dans .body (admin-shell) et se
+ * fait donc etirer par align-items:stretch. Mais .sidebar, un cran plus bas,
+ * n'en herite pas automatiquement (height:auto = se limite a son contenu) :
+ * sans ce :host { display:flex } + .sidebar { flex:1 }, le fond de la
+ * sidebar s'arretait au bouton logout au lieu de couvrir tout l'ecran.
+ */
+:host {
+  display: flex;
+  align-self: stretch;
+}
+
+.sidebar {
+  width: 220px;
+  flex: 1;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+}
+
+.nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 20px 0;
+  flex: 1;
+}
+
+.nav-item {
+  padding: 10px 20px;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-left: 2px solid transparent;
+  color: var(--text-dim);
+  font-family: inherit;
+}
+
+.nav-item:hover { color: var(--text); }
+
+.nav-item.active {
+  color: var(--text);
+  background: var(--surface-alt);
+  border-left-color: var(--accent);
+}
+
+.sidebar-footer {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.theme-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--text-dim);
+  cursor: pointer;
+}
+
+.theme-switch {
+  width: 32px;
+  height: 18px;
+  border-radius: 9px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.theme-switch.on { background: var(--accent-bg); }
+
+.theme-switch-knob {
+  width: 12px;
+  height: 12px;
+  border-radius: 6px;
+  background: var(--accent);
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: left .15s;
+}
+
+.theme-switch.on .theme-switch-knob { left: 16px; }
+
+.footer-actions { display: flex; gap: 8px; }
+
+.btn-ghost-full {
+  flex: 1;
+  padding: 8px 0;
+  border-radius: 4px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.btn-ghost-full:hover { opacity: 0.85; }
+
+.btn-ghost-full.active { border-color: var(--accent); color: var(--accent); }

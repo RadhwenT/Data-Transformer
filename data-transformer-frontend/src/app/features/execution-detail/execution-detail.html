@@ -1,0 +1,71 @@
+<app-shell [navItems]="navItems" active="executions" title="executions / detail">
+    <a class="back" routerLink="/executions">← executions</a>
+
+    @if (loading()) {
+      <p class="muted">chargement...</p>
+    } @else if (errorMessage()) {
+      <p class="error">✗ {{ errorMessage() }}</p>
+    } @else if (execution(); as e) {
+
+      <div class="header">
+        <div>
+          <div class="title-row">
+            <h1>execution #{{ e.id }}</h1>
+            <span class="run-status" [class]="e.status.toLowerCase()">{{ e.status.toLowerCase() }}</span>
+          </div>
+          <p class="subtitle">
+            {{ e.processName }} · {{ formatDate(e.startedAt) }} → {{ formatDate(e.finishedAt) }} · {{ formatDuration(e.durationMs) }}
+          </p>
+        </div>
+        <div class="header-actions">
+          @if (e.inputFileName) {
+            <button type="button" class="secondary" (click)="downloadInput()">download input</button>
+          }
+          @if (e.hasOutput) {
+            <button type="button" class="primary" (click)="downloadOutput()">download output</button>
+          }
+        </div>
+      </div>
+
+      @if (e.status === 'FAILED') {
+        <div class="banner error">✗ {{ e.errorMessage }}</div>
+      }
+
+      <div class="panel">
+        <h2>rules applied</h2>
+        <ol class="rules-list">
+          @for (rule of e.rules; track rule.id) {
+            <li [class.failed]="isLikelyFailedRule(rule)">{{ rule.ruleName }} — {{ ruleLabel(rule) }}</li>
+          }
+        </ol>
+      </div>
+
+      <div class="columns">
+        <div class="panel">
+          <h2>input @if (e.inputFileName) { · {{ e.inputFileName }} }</h2>
+          @if (contentLoading()) {
+            <p class="muted">chargement...</p>
+          } @else {
+            <pre class="content-block">{{ content()?.input }}</pre>
+            @if (content()?.inputTruncated) {
+              <p class="truncated-hint">truncated — download the file for the full content</p>
+            }
+          }
+        </div>
+
+        <div class="panel">
+          <h2>output</h2>
+          @if (contentLoading()) {
+            <p class="muted">chargement...</p>
+          } @else if (content()?.output === null) {
+            <p class="muted">no output — execution failed</p>
+          } @else {
+            <pre class="content-block">{{ content()?.output }}</pre>
+            @if (content()?.outputTruncated) {
+              <p class="truncated-hint">truncated — download the file for the full content</p>
+            }
+          }
+        </div>
+      </div>
+    }
+</app-shell>
