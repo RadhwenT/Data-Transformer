@@ -1,0 +1,58 @@
+/* You can add global styles to this file, and also import other style files */
+
+:root {
+  --bg:            #0b0d0c;   /* fond de page (avec la grille 28px) */
+  --bg-grid:       #101413;
+  --surface:       #131313;   /* panneaux */
+  --surface-alt:   #1a1a1a;   /* champs, badges neutres */
+  --field:         #0d0d0d;   /* fond des inputs */
+  --border:        #262626;
+  --text:          #e5e5e5;
+  --text-dim:      #a3a3a3;
+  --muted:         #737373;
+  --accent:        #22c55e;   /* vert phosphore, un seul accent */
+  --accent-bg:     #14532d;
+  --danger:        #ef4444;
+  --danger-bg:     #450a0a;
+  --on-accent:     #0d0d0d;   /* texte sur fond --accent */
+  --font-mono:     'JetBrains Mono', 'Courier New', monospace;
+}
+
+/* Theme clair : bascule via ThemeService (data-theme sur <html>). */
+:root[data-theme="light"] {
+  --bg:            #f6f6f3;
+  --bg-grid:       #e7e7e3;
+  --surface:       #ffffff;
+  --surface-alt:   #f0f0ec;
+  --field:         #fbfbf9;
+  --border:        #dcdcd7;
+  --text:          #18181b;
+  --text-dim:      #52525b;
+  --muted:         #8b8b84;
+  --accent:        #15803d;
+  --accent-bg:     #dcfce7;
+  --danger:        #b91c1c;
+  --danger-bg:     #fee2e2;
+  --on-accent:     #ffffff;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+}
+
+/*
+ * Le navigateur (autofill / gestionnaire de mots de passe) repeint les champs
+ * en blanc et ignore `background`. Seul ce hack (box-shadow inset au lieu du
+ * background, + delai de transition) permet de forcer nos couleurs — ici via
+ * les tokens de theme pour que ca reste correct en clair comme en sombre.
+ */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text);
+  -webkit-box-shadow: 0 0 0px 1000px var(--field) inset;
+  box-shadow: 0 0 0px 1000px var(--field) inset;
+  transition: background-color 5000s ease-in-out 0s;
+}

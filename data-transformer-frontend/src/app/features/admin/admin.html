@@ -1,0 +1,125 @@
+<app-shell [navItems]="navItems" active="users" title="admin">
+
+        <div class="header">
+      <h1>users</h1>
+      <div class="header-actions">
+        <input
+          class="search"
+          type="text"
+          placeholder="rechercher..."
+          [ngModel]="search()"
+          (ngModelChange)="onSearchChange($event)"
+          name="search" />
+        @if (!showForm()) {
+          <button class="primary" (click)="openForm()">+ new user</button>
+        }
+      </div>
+    </div>
+
+    @if (errorMessage()) {
+      <p class="error">✗ {{ errorMessage() }}</p>
+    }
+
+    @if (showForm()) {
+      <div class="panel">
+
+        @if (createdUser(); as created) {
+          <div class="created">
+            <p class="created-title">✓ compte cree : {{ created.email }}</p>
+            <div class="password-box">
+              <span class="password">{{ created.generatedPassword }}</span>
+              <button class="ghost" (click)="copyPassword()">
+                @switch (copyFeedback()) {
+                  @case ('copied') { ✓ copied }
+                  @case ('failed') { copy failed — select manually }
+                  @default { copy }
+                }
+              </button>
+            </div>
+            <p class="warning">{{ created.avertissement }}</p>
+            <button class="ghost" (click)="closeForm()">fermer</button>
+          </div>
+        } @else {
+          <form (ngSubmit)="onSubmit()">
+            <div class="row">
+              <div class="field">
+                <label for="firstName">first name</label>
+                <input id="firstName" name="firstName" [(ngModel)]="firstName"
+                       [disabled]="creating()" required />
+              </div>
+              <div class="field">
+                <label for="lastName">last name</label>
+                <input id="lastName" name="lastName" [(ngModel)]="lastName"
+                       [disabled]="creating()" required />
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="field">
+                <label for="email">email</label>
+                <input id="email" type="email" name="email" [(ngModel)]="email"
+                       [disabled]="creating()" required />
+              </div>
+              <div class="field">
+                <label for="role">role</label>
+                <select id="role" name="role" [(ngModel)]="role" [disabled]="creating()">
+                  <option value="USER">USER</option>
+                  <option value="ADMIN">ADMIN</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="ghost" (click)="closeForm()">cancel</button>
+              <button type="submit" class="primary" [disabled]="creating()">
+                {{ creating() ? 'creation...' : 'create' }}
+              </button>
+            </div>
+          </form>
+        }
+
+      </div>
+    }
+
+        @if (loading()) {
+      <p class="muted">chargement...</p>
+    } @else if (filteredUsers().length === 0) {
+      <p class="muted">aucun utilisateur</p>
+    } @else {
+      <table>
+        <thead>
+          <tr>
+            <th>name</th>
+            <th>email</th>
+            <th>role</th>
+            <th>status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (u of filteredUsers(); track u.id) {
+            <tr [class.inactive]="!u.active">
+              <td>{{ u.firstName }} {{ u.lastName }}</td>
+              <td class="mono">{{ u.email }}</td>
+              <td>
+                <span class="badge" [class.admin]="u.role === 'ADMIN'">{{ u.role }}</span>
+              </td>
+              <td>
+                <span class="badge" [class.disabled]="!u.active">
+                  {{ u.active ? 'active' : 'disabled' }}
+                </span>
+              </td>
+              <td class="actions">
+                @if (u.active) {
+                  <button class="ghost" (click)="deactivate(u)">disable</button>
+                } @else {
+                  <button class="ghost enable" (click)="activate(u)">enable</button>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+
+</app-shell>

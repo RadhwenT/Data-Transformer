@@ -1,0 +1,44 @@
+<div class="login-page">
+  <div class="login-box">
+
+    <div class="brand">
+      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="6" y="6" width="22" height="22" rx="2" fill="none" stroke="currentColor" stroke-width="4"/>
+        <rect x="36" y="36" width="22" height="22" rx="2" fill="currentColor"/>
+        <path d="M30 17 L44 17 L44 31" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="square"/>
+      </svg>
+      <span class="brand-name">data-transformer</span>
+    </div>
+
+    <form (ngSubmit)="onSubmit()">
+      <label for="email">email</label>
+      <input
+        id="email"
+        type="email"
+        name="email"
+        [(ngModel)]="email"
+        [disabled]="loading()"
+        autocomplete="email"
+        required />
+
+      <label for="password">password</label>
+      <input
+        id="password"
+        type="password"
+        name="password"
+        [(ngModel)]="password"
+        [disabled]="loading()"
+        autocomplete="current-password"
+        required />
+
+      @if (errorMessage()) {
+        <p class="error">✗ {{ errorMessage() }}</p>
+      }
+
+      <button type="submit" [disabled]="loading()">
+        {{ loading() ? 'connexion...' : 'sign in' }}
+      </button>
+    </form>
+
+  </div>
+</div>

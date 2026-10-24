@@ -1,0 +1,69 @@
+<app-shell [navItems]="navItems" active="processes" title="processes">
+    <div class="header">
+      <h1>processes</h1>
+      <div class="header-actions">
+        <input
+          class="search"
+          type="text"
+          placeholder="rechercher..."
+          [ngModel]="search()"
+          (ngModelChange)="onSearchChange($event)"
+          name="search" />
+        <button class="primary" (click)="createNew()">+ new process</button>
+      </div>
+    </div>
+
+    @if (loading()) {
+      <p class="muted">chargement...</p>
+    } @else if (errorMessage()) {
+      <p class="error">✗ {{ errorMessage() }}</p>
+    } @else if (processes().length === 0) {
+      <p class="muted">aucun traitement</p>
+    } @else if (filteredProcesses().length === 0) {
+      <p class="muted">aucun traitement ne correspond a "{{ search() }}"</p>
+    } @else {
+      <table>
+        <thead>
+          <tr>
+            <th>name</th>
+            <th>format</th>
+            <th>rules</th>
+            <th>last run</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (p of filteredProcesses(); track p.id) {
+            <tr>
+              <td>
+                <div class="name">{{ p.name }}</div>
+                <div class="desc">{{ p.description }}</div>
+              </td>
+              <td class="mono">{{ p.inputFormat }}→{{ p.outputFormat }}</td>
+              <td class="mono">{{ p.ruleCount }}</td>
+              <td>
+                @if (p.lastRunStatus && p.lastRunExecutionId) {
+                  <a [routerLink]="['/executions', p.lastRunExecutionId]" (click)="$event.stopPropagation()">
+                    <span class="run-status" [class]="p.lastRunStatus.toLowerCase()">{{ p.lastRunStatus.toLowerCase() }}</span>
+                  </a>
+                } @else if (p.lastRunStatus) {
+                  <span class="run-status" [class]="p.lastRunStatus.toLowerCase()">{{ p.lastRunStatus.toLowerCase() }}</span>
+                } @else {
+                  <span class="muted">never</span>
+                }
+              </td>
+              <td class="actions">
+                @if (p.ruleCount === 0) {
+                  <button class="ghost" (click)="open(p)">+ rules</button>
+                } @else {
+                  <button class="primary" [routerLink]="['/processes', p.id, 'run']" (click)="$event.stopPropagation()">use</button>
+                }
+                <button class="secondary" (click)="open(p)">edit</button>
+                <button class="ghost danger" (click)="delete(p, $event)">remove</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+</app-shell>

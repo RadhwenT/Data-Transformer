@@ -1,0 +1,110 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+background-color: #0b0d0c;
+background-image:
+  linear-gradient(#101413 1px, transparent 1px),
+  linear-gradient(90deg, #101413 1px, transparent 1px);
+background-size: 28px 28px;
+
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+.login-box {
+  width: 380px;        
+  padding: 36px;          
+  background: #131313;
+  border: 1px solid #262626;
+  border-radius: 6px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 28px;
+  color: #22c55e;
+}
+
+.brand svg {
+  width: 24px;
+  height: 24px;
+}
+
+.brand-name { font-size: 17px; font-weight: 500; color: #e5e5e5; }  /* était 15px */
+
+
+
+input:focus {
+  outline: none;
+  border-color: #22c55e;
+}
+
+input:disabled {
+  opacity: 0.5;
+}
+
+/*
+ * Le navigateur (autofill / gestionnaire de mots de passe) repeint le champ
+ * en blanc et ignore `background`. Seul ce hack (box-shadow inset au lieu
+ * du background, + delai de transition) permet de forcer nos couleurs.
+ */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #e5e5e5;
+  -webkit-box-shadow: 0 0 0px 1000px #0d0d0d inset;
+  box-shadow: 0 0 0px 1000px #0d0d0d inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+label {
+  display: block;
+  font-size: 13px;        /* était 12px */
+  color: #737373;
+  margin-bottom: 7px;
+}
+
+input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 14px;     /* était 9px 12px */
+  margin-bottom: 20px;
+  background: #0d0d0d;
+  border: 1px solid #262626;
+  border-radius: 4px;
+  color: #e5e5e5;
+  font-family: inherit;
+  font-size: 15px;        /* était 14px */
+}
+
+button {
+  width: 100%;
+  padding: 12px;          /* était 10px */
+  background: #22c55e;
+  border: none;
+  border-radius: 4px;
+  color: #0d0d0d;
+  font-family: inherit;
+  font-size: 15px;        /* était 14px */
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.error {
+  margin: 0 0 16px;
+  font-size: 14px;        /* était 13px */
+  color: #ef4444;
+}
+
+button:hover:not(:disabled) {
+  background: #16a34a;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+

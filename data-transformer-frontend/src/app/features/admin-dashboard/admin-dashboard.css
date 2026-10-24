@@ -1,0 +1,107 @@
+h1 { margin: 0 0 24px; font-size: 24px; font-weight: 500; }
+h2 { margin: 0 0 16px; font-size: 15px; font-weight: 500; }
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-label { font-size: 12px; color: var(--muted); }
+
+select {
+  padding: 8px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+}
+
+select:focus { outline: none; border-color: var(--accent); }
+
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.kpi-card {
+  padding: 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.kpi-label { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+.kpi-value { font-size: 26px; font-weight: 500; margin-bottom: 10px; }
+
+.sparkline {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 24px;
+}
+
+.bar { width: 4px; border-radius: 1px; }
+.bar.accent { background: var(--accent); opacity: 0.6; }
+.bar.dim { background: var(--text-dim); opacity: 0.5; }
+
+.dash-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 20px;
+}
+
+.panel {
+  padding: 22px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-bottom: 22px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+
+td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--surface-alt);
+  font-size: 14px;
+}
+
+tbody tr:last-child td { border-bottom: none; }
+
+.mono { color: var(--text-dim); font-size: 13px; }
+
+.run-status {
+  padding: 3px 10px;
+  border-radius: 3px;
+  font-size: 11px;
+  background: var(--surface-alt);
+  color: var(--text-dim);
+}
+
+.run-status.success { background: var(--accent-bg); color: var(--accent); }
+.run-status.failed { background: var(--danger-bg); color: var(--danger); }
+.run-status.pending,
+.run-status.running { background: var(--surface-alt); color: var(--text-dim); }
+
+.muted { color: var(--muted); font-size: 14px; }
+.error { color: var(--danger); font-size: 14px; }

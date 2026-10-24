@@ -1,0 +1,39 @@
+<div class="shell">
+  <div class="topbar">
+    <div class="brand">
+      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="6" y="6" width="22" height="22" rx="2" fill="none" stroke="currentColor" stroke-width="4"/>
+        <rect x="36" y="36" width="22" height="22" rx="2" fill="currentColor"/>
+        <path d="M30 17 L44 17 L44 31" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="square"/>
+      </svg>
+      <span class="brand-name">data-transformer</span>
+    </div>
+
+    <div class="breadcrumb">{{ title() }}</div>
+
+    <div class="topbar-right">
+      <button class="search-box" type="button" (click)="openPalette()">
+        <span class="search-icon">search·</span>
+        <span class="search-placeholder">rechercher processus, exécutions, commandes…</span>
+        <span class="kbd-hint">⌘K</span>
+      </button>
+      <span class="user-email">{{ userEmail() }}</span>
+    </div>
+  </div>
+
+  <div class="body">
+    <app-sidebar [items]="navItems()" [active]="active()" />
+
+    <main class="content">
+      <ng-content />
+    </main>
+  </div>
+</div>
+
+<app-command-palette
+  [open]="paletteOpen()"
+  [query]="paletteQuery()"
+  [commands]="commands()"
+  (queryChange)="onPaletteQueryChange($event)"
+  (select)="runCommand($event)"
+  (close)="closePalette()" />

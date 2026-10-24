@@ -1,0 +1,109 @@
+<app-shell [navItems]="navItems" active="processes" title="processes / run">
+    @if (loading()) {
+      <p class="muted">chargement...</p>
+    } @else if (errorMessage()) {
+      <p class="error">✗ {{ errorMessage() }}</p>
+    } @else if (process(); as p) {
+
+      <a class="back" [routerLink]="['/processes', p.id]">← {{ p.name }}</a>
+
+      <h1>run · {{ p.name }}</h1>
+      <div class="badges">
+        <span class="badge">{{ p.inputFormat }} → {{ p.outputFormat }}</span>
+        <span class="badge">{{ p.rules.length }} règles</span>
+        <span class="badge">traitement synchrone</span>
+      </div>
+
+      @if (p.rules.length === 0) {
+        <p class="error">this process has no rules — nothing to run yet.</p>
+      }
+
+      <div class="panel">
+
+        <div class="step">
+          <div class="step-header">
+            <span class="step-number">01</span>
+            <h2>fichier d'entrée</h2>
+          </div>
+          <div class="step-body">
+            @if (!selectedFile()) {
+              <div
+                class="dropzone"
+                [class.dragging]="dragging()"
+                tabindex="0"
+                role="button"
+                aria-label="deposer ou choisir un fichier"
+                (dragover)="onDragOver($event)"
+                (dragleave)="onDragLeave($event)"
+                (drop)="onDrop($event)"
+                (keydown.enter)="openFileDialog()"
+                (keydown.space)="openFileDialog()"
+                (click)="openFileDialog()"
+              >
+                <p>déposez votre fichier {{ p.inputFormat }} ici</p>
+                <p class="or">ou</p>
+                <button type="button" class="ghost">parcourir</button>
+              </div>
+              <input
+                #fileInput
+                type="file"
+                hidden
+                [accept]="acceptExtension()"
+                (change)="onFileInputChange($event)"
+              />
+            } @else {
+              <div class="file-loaded">
+                <div class="file-info">
+                  <span class="file-name">{{ selectedFile()!.name }}</span>
+                  <span class="file-size">{{ formatFileSize(selectedFile()!.size) }}</span>
+                </div>
+                <button type="button" class="ghost" (click)="removeFile()">remove</button>
+              </div>
+            }
+
+            @if (fileError()) {
+              <p class="error">✗ {{ fileError() }}</p>
+            }
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-header">
+            <span class="step-number">02</span>
+            <h2>règles appliquées</h2>
+          </div>
+          <div class="step-body">
+            <div class="rule-grid">
+              @for (rule of p.rules; track rule.id) {
+                <div class="rule-card">
+                  <div class="rule-card-title">{{ rule.executionOrder }}. {{ rule.ruleType }}</div>
+                  <div class="rule-card-fields">{{ fieldsLabel(rule) }}</div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-header">
+            <span class="step-number">03</span>
+            <h2>exécution</h2>
+          </div>
+          <div class="step-body">
+            <div class="run-row">
+              <button type="button" class="primary" [disabled]="!canRun()" (click)="run()">
+                {{ running() ? 'running...' : 'run' }}
+              </button>
+              @if (!selectedFile()) {
+                <span class="muted">aucun fichier chargé</span>
+              }
+              @if (runError()) {
+                <span class="error">✗ {{ runError() }}</span>
+              }
+            </div>
+          </div>
+        </div>
+
+      </div>
+    }
+</app-shell>

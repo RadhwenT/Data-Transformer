@@ -1,0 +1,91 @@
+<app-shell [navItems]="navItems" active="settings" title="settings">
+  <h1>settings</h1>
+
+  <div class="panel">
+    <h2>mes informations</h2>
+
+    @if (profileError()) {
+      <p class="error">✗ {{ profileError() }}</p>
+    }
+    @if (profileSuccess()) {
+      <p class="success">✓ enregistré</p>
+    }
+
+    <form (ngSubmit)="saveProfile()">
+      <div class="row">
+        <div class="field">
+          <label for="firstName">prénom</label>
+          <input id="firstName" name="firstName" [(ngModel)]="firstName" [disabled]="savingProfile()" required />
+        </div>
+        <div class="field">
+          <label for="lastName">nom</label>
+          <input id="lastName" name="lastName" [(ngModel)]="lastName" [disabled]="savingProfile()" required />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="email">email</label>
+        <input id="email" type="email" name="email" [(ngModel)]="email" [disabled]="savingProfile()" required />
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="primary" [disabled]="savingProfile()">
+          {{ savingProfile() ? 'enregistrement...' : 'enregistrer' }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="panel">
+    <h2>mot de passe</h2>
+
+    @if (passwordError()) {
+      <p class="error">✗ {{ passwordError() }}</p>
+    }
+    @if (passwordSuccess()) {
+      <p class="success">✓ mot de passe modifié</p>
+    }
+
+    <form (ngSubmit)="changePassword()">
+      <div class="field">
+        <label for="currentPassword">mot de passe actuel</label>
+        <input
+          id="currentPassword"
+          type="password"
+          name="currentPassword"
+          [(ngModel)]="currentPassword"
+          [disabled]="changingPassword()"
+          required />
+      </div>
+
+      <div class="field">
+        <label for="newPassword">nouveau mot de passe</label>
+        <input
+          id="newPassword"
+          type="password"
+          name="newPassword"
+          [(ngModel)]="newPassword"
+          [disabled]="changingPassword()"
+          required />
+        <p class="hint">8 caractères minimum, au moins un chiffre.</p>
+      </div>
+
+      <div class="field">
+        <label for="confirmPassword">confirmer le nouveau mot de passe</label>
+        <input
+          id="confirmPassword"
+          type="password"
+          name="confirmPassword"
+          [(ngModel)]="confirmPassword"
+          [disabled]="changingPassword()"
+          required />
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="primary" [disabled]="changingPassword()">
+          {{ changingPassword() ? 'modification...' : 'changer le mot de passe' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</app-shell>

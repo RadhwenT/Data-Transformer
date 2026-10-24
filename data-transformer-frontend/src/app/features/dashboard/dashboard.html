@@ -1,0 +1,84 @@
+<app-shell [navItems]="navItems" active="dashboard" title="dashboard">
+  <h1>dashboard</h1>
+
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="kpi-label">processes actifs</div>
+      <div class="kpi-value">{{ activeProcessCount() }}</div>
+      <div class="sparkline">
+        @for (h of sparklineProcesses; track $index) {
+          <div class="bar accent" [style.height.px]="h * 2"></div>
+        }
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">exécutions 24h</div>
+      <div class="kpi-value">{{ executions24h() }}</div>
+      <div class="sparkline">
+        @for (h of sparklineExecutions; track $index) {
+          <div class="bar accent" [style.height.px]="h * 2"></div>
+        }
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">taux de succès</div>
+      <div class="kpi-value">{{ successRate() }}</div>
+      <div class="sparkline">
+        @for (h of sparklineSuccess; track $index) {
+          <div class="bar accent" [style.height.px]="h * 2"></div>
+        }
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">durée moy.</div>
+      <div class="kpi-value">{{ avgDuration() }}</div>
+      <div class="sparkline">
+        @for (h of sparklineDuration; track $index) {
+          <div class="bar dim" [style.height.px]="h * 2"></div>
+        }
+      </div>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <p class="muted">chargement...</p>
+  } @else if (errorMessage()) {
+    <p class="error">✗ {{ errorMessage() }}</p>
+  } @else {
+
+    <div class="panel">
+      <h2>exécutions récentes</h2>
+      @if (recentExecutions().length === 0) {
+        <p class="muted">aucune exécution</p>
+      } @else {
+        <table>
+          <thead>
+            <tr>
+              <th>id</th>
+              <th>process</th>
+              <th>started</th>
+              <th>status</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (e of recentExecutions(); track e.id) {
+              <tr (click)="open(e)">
+                <td class="mono">#{{ e.id }}</td>
+                <td>{{ e.processName }}</td>
+                <td class="mono">{{ formatDate(e.startedAt) }}</td>
+                <td><span class="run-status" [class]="e.status.toLowerCase()">{{ e.status.toLowerCase() }}</span></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
+
+    <div class="quick-actions">
+      <button class="primary" (click)="goNewProcess()">+ new process</button>
+      <button class="ghost" (click)="goRunProcess()">run a process</button>
+      <button class="ghost" (click)="goExecutions()">view all executions</button>
+    </div>
+
+  }
+</app-shell>

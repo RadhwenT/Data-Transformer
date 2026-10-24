@@ -1,0 +1,47 @@
+<app-shell [navItems]="navItems" active="executions" title="executions" [extraCommands]="filterCommands()">
+    <div class="header">
+      <h1>executions</h1>
+      <div class="header-actions">
+        <button class="ghost" type="button" (click)="openFilters()">filtres avancés (⌘K)</button>
+      </div>
+    </div>
+
+    @if (loading()) {
+      <p class="muted">chargement...</p>
+    } @else if (errorMessage()) {
+      <p class="error">✗ {{ errorMessage() }}</p>
+    } @else if (executions().length === 0) {
+      <p class="muted">no executions yet · <a routerLink="/processes">go to processes</a></p>
+    } @else if (filteredExecutions().length === 0) {
+      <p class="muted">no executions match this filter</p>
+    } @else {
+      <table>
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>process</th>
+            <th>started</th>
+            <th>duration</th>
+            <th>status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (e of filteredExecutions(); track e.id) {
+            <tr (click)="open(e)">
+              <td class="mono">#{{ e.id }}</td>
+              <td>{{ e.processName }}</td>
+              <td class="mono">{{ formatDate(e.startedAt) }}</td>
+              <td class="mono">{{ formatDuration(e) }}</td>
+              <td>
+                <span class="run-status" [class]="e.status.toLowerCase()">{{ e.status.toLowerCase() }}</span>
+              </td>
+              <td class="actions">
+                <button class="ghost" (click)="open(e); $event.stopPropagation()">view</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+</app-shell>

@@ -1,0 +1,110 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.search {
+  width: 240px;
+  padding: 8px 14px;
+  background: var(--field);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.search:focus { outline: none; border-color: var(--accent); }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+th {
+  text-align: left;
+  padding: 14px 18px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+
+td {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--surface-alt);
+  vertical-align: top;
+}
+
+tbody tr:last-child td { border-bottom: none; }
+
+.name { font-size: 16px; }
+.desc { font-size: 14px; color: var(--muted); margin-top: 4px; }
+.mono { font-size: 14px; color: var(--text-dim); }
+
+.actions { display: flex; gap: 8px; justify-content: flex-end; }
+
+.run-status {
+  padding: 3px 10px;
+  border-radius: 3px;
+  font-size: 12px;
+  background: var(--surface-alt);
+  color: var(--text-dim);
+}
+
+.run-status.success { background: var(--accent-bg); color: var(--accent); }
+.run-status.failed { background: var(--danger-bg); color: var(--danger); }
+.run-status.pending,
+.run-status.running { background: var(--surface-alt); color: var(--text-dim); }
+
+td a { text-decoration: none; }
+td a:hover .run-status { opacity: 0.85; }
+
+button {
+  padding: 8px 18px;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+button.primary {
+  background: var(--accent);
+  border: none;
+  color: var(--on-accent);
+}
+
+button.secondary {
+  background: var(--surface-alt);
+  border: none;
+  color: var(--text);
+}
+
+button.ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+
+button.ghost.danger { border-color: var(--danger-bg); color: var(--danger); }
+
+button:hover { opacity: 0.85; }
+
+.muted { color: var(--muted); font-size: 14px; }
+.error { color: var(--danger); font-size: 14px; }

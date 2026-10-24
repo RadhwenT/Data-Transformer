@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "app.storage.dir",
+      "type": "java.lang.String",
+      "description": "Dossier de stockage des fichiers d'entree et de sortie."
+    }
+  ]
+}
