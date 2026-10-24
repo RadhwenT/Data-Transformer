@@ -6,6 +6,16 @@ Application web **full-stack** de transformation de fichiers de données : l'uti
 
 [![CI](https://github.com/RadhwenT/Data-Transformer/actions/workflows/ci.yml/badge.svg)](https://github.com/RadhwenT/Data-Transformer/actions/workflows/ci.yml) ![Java](https://img.shields.io/badge/Java-25-orange) ![Spring Boot](https://img.shields.io/badge/Spring_Boot-4-6DB33F) ![Angular](https://img.shields.io/badge/Angular-22-DD0031) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791) ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED)
 
+## Aperçu
+
+![Détail d'une exécution : règles appliquées, fichier d'entrée et résultat](docs/captures/execution.jpg)
+
+| Tableau de bord | Pipeline de règles d'un traitement |
+| --- | --- |
+| ![Tableau de bord](docs/captures/dashboard.jpg) | ![Pipeline de règles](docs/captures/pipeline.jpg) |
+| **Historique des exécutions** | **Tableau de bord administrateur** |
+| ![Historique des exécutions](docs/captures/historique.jpg) | ![Tableau de bord administrateur](docs/captures/admin.jpg) |
+
 ## Points clés
 
 - **Moteur de transformation** : règles enchaînées dans un ordre défini ; chaque exécution conserve le fichier d'entrée, le résultat et les règles appliquées (téléchargeables).
