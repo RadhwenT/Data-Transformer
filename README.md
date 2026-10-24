@@ -1,3 +1,63 @@
+# Data Transformer
+
+Application web **full-stack** de transformation de fichiers de données : l'utilisateur définit un *traitement* — une chaîne de règles (renommer un champ, concaténer, mettre en majuscules, reformater une date) — puis l'exécute sur des fichiers **JSON** ou **XML** et consulte l'historique de chaque exécution (fichier d'entrée, résultat, règles appliquées).
+
+> Projet réalisé en binôme lors d'un stage d'été (août 2026), développé de zéro.
+
+[![CI](https://github.com/RadhwenT/Data-Transformer/actions/workflows/ci.yml/badge.svg)](https://github.com/RadhwenT/Data-Transformer/actions/workflows/ci.yml) ![Java](https://img.shields.io/badge/Java-25-orange) ![Spring Boot](https://img.shields.io/badge/Spring_Boot-4-6DB33F) ![Angular](https://img.shields.io/badge/Angular-22-DD0031) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791) ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED)
+
+## Points clés
+
+- **Moteur de transformation** : règles enchaînées dans un ordre défini ; chaque exécution conserve le fichier d'entrée, le résultat et les règles appliquées (téléchargeables).
+- **Deux rôles** : `USER` (traitements, exécutions, historique) et `ADMIN` (gestion des comptes, tableau de bord global).
+- **Sécurité** : authentification par session, mots de passe hachés, chaque utilisateur n'accède qu'à ses propres traitements et exécutions.
+- **Interface Angular** : thème clair / sombre, palette de commandes `Ctrl+K`.
+- **152 tests automatisés** exécutés à chaque push : 116 côté backend (JUnit, dont des tests d'intégration sur un vrai PostgreSQL via Testcontainers) et 36 côté frontend (Vitest).
+
+## Stack technique
+
+| Couche | Technologies |
+| --- | --- |
+| Backend | Java 25, Spring Boot 4 (Web, Data JPA, Validation), Jackson (JSON / XML) |
+| Frontend | Angular 22, TypeScript |
+| Base de données | PostgreSQL 16 (Docker Compose) |
+| Tests | JUnit 5, Mockito, Testcontainers, Vitest |
+| CI | GitHub Actions |
+
+## Lancer le projet
+
+Prérequis : **JDK 25**, **Node.js 22+**, **Docker Desktop**. Maven n'est pas nécessaire (Maven Wrapper inclus).
+
+```bash
+# 1. Base de données
+docker compose up -d
+
+# 2. Backend (port 8081)
+cd data-transformer
+./mvnw spring-boot:run          # Windows : .\mvnw spring-boot:run
+
+# 3. Frontend (port 4200), dans un autre terminal
+cd data-transformer-frontend
+npm install
+npm start
+```
+
+Ouvrir **http://localhost:4200**. Des comptes et un traitement d'exemple (« Nettoyage clients ») sont créés au premier démarrage :
+
+| Rôle | Email | Mot de passe |
+| --- | --- | --- |
+| Utilisateur | `demo@example.com` | `demo123` |
+| Administrateur | `admin@example.com` | `admin123` |
+
+Des fichiers d'exemple sont fournis à la racine : `simple.json`, `clients-multi.json`, `clients-erreur.json` (ce dernier produit volontairement une exécution en erreur).
+
+## Tests
+
+```bash
+cd data-transformer && ./mvnw test                    # Docker doit être démarré
+cd data-transformer-frontend && npx ng test --watch=false
+```
+
 ## Documentation
 
 - [Cahier des charges](docs/cahier-des-charges.md)
